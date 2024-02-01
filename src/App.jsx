@@ -1,6 +1,6 @@
 import './App.css';
 import "./styles/resizableLayout.css";
-import "./styles/splitter.css";
+import "./styles/imageHolders.css";
 import ResizableLayout from './components/resizableLayout';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className="App">
-      <h1>Resizable Layout Example</h1>
+      {/* <h1>Resizable Layout Example</h1> */}
       <ResizableLayout />
     </div>
   );

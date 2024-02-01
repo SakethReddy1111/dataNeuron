@@ -1,90 +1,27 @@
-import React from "react";
-import Splitter from "./splitter";
-import { useResizable } from "react-resizable-layout";
-import { cn } from "../utils/cn";
+import React, { useEffect } from 'react';
+import ResizableDiv from './imageHolders';
 
-const ResizableLayout = ()=> {
-  const {
-    isDragging: isTerminalDragging,
-    position: terminalH,
-    splitterProps: terminalDragBarProps
-  } = useResizable({
-    axis: "y",
-    initial: 150,
-    min: 50,
-    reverse: true
-  });
+const ResizableLayout = () => {
 
+  // const [area, setArea] = useEffect({width:0, height:0})
 
-  const {
-    isDragging: isTerminalDragging2,
-    position: terminalH2,
-    splitterProps: terminalDragBarProps2
-  } = useResizable({
-    axis: "y",
-    initial: 300,
-    min: 50,
-    reverse: true
-  });
+  // useEffect(()=>{
+  //   let width = window.innerWidth
+  //   let height = window.innerHeight
 
-  const {
-    isDragging: isFileDragging,
-    position: fileW,
-    splitterProps: fileDragBarProps
-  } = useResizable({
-    axis: "x",
-    initial: 250,
-    min: 50
-  });
-  const {
-    isDragging: isPluginDragging,
-    position: pluginW,
-    splitterProps: pluginDragBarProps
-  } = useResizable({
-    axis: "x",
-    initial: 200,
-    min: 50,
-    reverse: true
-  });
+  //   setArea({width, height})
+  // }, [area])
+
 
   return (
-    <div    
-      className={
-        "flex flex-column h-screen bg-dark font-mono color-white overflow-hidden"
-      }
-    >
-      <div className={"flex grow"}>
-        <div
-          className={cn("shrink-0 contents", isFileDragging && "dragging")}
-          style={{ width: fileW }}
-        >
-          File Tree
-        </div>
-        <Splitter isDragging={isFileDragging} {...fileDragBarProps} />
-        <div className={"flex grow"}>
-          <div className={"grow bg-darker contents"}>Editor</div>
-          
-        </div>
+    <div id="container" style={{ display: 'flex', flexDirection: 'column' }}>
+      <div id="header" style={{ display: 'flex' }}>
+        <ResizableDiv case={1} />
+        <ResizableDiv case={2} />
       </div>
-      <Splitter
-        dir={"horizontal"}
-        isDragging={isTerminalDragging}
-        {...terminalDragBarProps}
-      />
-      <div
-        className={cn(
-          "shrink-0 bg-darker contents",
-          isTerminalDragging && "dragging"
-        )}
-        style={{ height: terminalH }}
-      >
-        Terminal
+      <div>
+        <ResizableDiv case={3} />
       </div>
-      <Splitter
-        dir={"horizontal"}
-        isDragging={isTerminalDragging2}
-        {...terminalDragBarProps2}
-      />
     </div>
   );
 };
