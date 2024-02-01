@@ -1,4 +1,8 @@
 .App {
   font-family: sans-serif;
   text-align: center;
+  height: 100vh;
+  /* border: 1px solid red; */
+  flex:1;
+  display: flex;
 }
