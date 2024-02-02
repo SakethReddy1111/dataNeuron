@@ -49,7 +49,7 @@ const ResizableDiv = forwardRef(({updateTodo, getAllData}, ref) => {
 
   const getData = async () => {
     try {
-      let url = process.env.REACT_APP_BASE_URL + `/todo/getTodo?page=${page}&limit=${rowsPerPage}`;
+      let url = process.env.REACT_APP_BASE_URL + `todo/getTodo?page=${page}&limit=${rowsPerPage}`;
       let data = await axios.get(url);
 
       setData(data.data.data);
@@ -60,7 +60,7 @@ const ResizableDiv = forwardRef(({updateTodo, getAllData}, ref) => {
 
   const handleDelete = async(data)=>{
     try {
-      let url = process.env.REACT_APP_BASE_URL + `/todo/deleteTodo?_id=${data._id}`;
+      let url = process.env.REACT_APP_BASE_URL + `todo/deleteTodo?_id=${data._id}`;
 
       await axios.delete(url);
 
