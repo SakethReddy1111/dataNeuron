@@ -1,68 +1,158 @@
-import React, { useEffect, useState } from 'react';
-import { ResizableBox } from 'react-resizable';
-import 'react-resizable/css/styles.css';
+import React, { useEffect, useState, forwardRef, useImperativeHandle   } from "react";
+import { ResizableBox } from "react-resizable";
+import "react-resizable/css/styles.css";
+import axios from "axios";
+import {
+  TablePagination,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Button
+} from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 
-const ResizableDiv = (props) => {
+const ResizableDiv = forwardRef(({updateTodo, getAllData}, ref) => {
+  const [size, setSize] = useState({ width: 100, height: 100 });
+  const [data, setData] = useState({ data: [], metaData: [] });
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    // const {case} = props
-  const [size, setSize] = useState({ 
-    width: 100, 
-    height: 100
-});
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    console.log(newPage);
+  };
 
-useEffect(()=>{
-    getSize()
-    window.addEventListener('resize', getSize);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
-}, [])
+  useEffect(() => {
+    getSize();
+    window.addEventListener("resize", getSize);
+    getData();
+  }, []);
 
-const getSize = ()=>{
-    console.log("im called")
+  useEffect(()=>{
+    getData()
+  }, [page, rowsPerPage])
+
+  const getSize = () => {
     let obj = {
-        height : (window.innerHeight/2)-10
+      height: window.innerHeight / 2 - 10,
+      width: (window.innerWidth / 4) * 3 - 10,
+    };
+
+    setSize(obj);
+  };
+
+  const getData = async () => {
+    try {
+      let url = process.env.REACT_APP_BASE_URL + `/todo/getTodo?page=${page}&limit=${rowsPerPage}`;
+      let data = await axios.get(url);
+
+      setData(data.data.data);
+    } catch (er) {
+      console.log(er);
     }
+  };
 
-    if(props.case==3){
-        obj.width = window.innerWidth-10
-    }else{
-        obj.width = (window.innerWidth/2)-10
+  const handleDelete = async(data)=>{
+    try {
+      let url = process.env.REACT_APP_BASE_URL + `/todo/deleteTodo?_id=${data._id}`;
 
+      await axios.delete(url);
+
+      getAllData()
+    } catch (er) {
+      console.log(er);
     }
+  }
 
-    setSize(obj)
-}
+  useImperativeHandle(ref, () => ({
+    getData,
+  }), []);
 
-//   const onResize = (event, { size }) => {
-//     console.log(window.innerWidth)
-//     setSize(size);
-//   };
+  const ShowData = () => {
+    return (
+      <div>
+        <div>
+          <List
+            sx={{
+              width: 350,
+              maxWidth: size.width,
+              bgcolor: "background.paper",
+              position: "relative",
+              overflow: "auto",
+              maxHeight: size.height * 0.6,
+              "& ul": { padding: 0 },
+            }}
+            subheader={<li />}
+          >
+            {data.data.map((d, i) => (
+              <li key={i}>
+                <ul>
+                  <ListItem key={i}>
+                    <ListItemText primary={d.text} />
+                    <ListItemIcon>
+                    <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={()=>updateTodo(d)}
+                  style={{fontSize:10}}
+                >
+                  Update
+                </Button>
+                      <DeleteIcon onClick={()=>handleDelete(d)} />
+                    </ListItemIcon>
+                  </ListItem>
+                </ul>
+              </li>
+            ))}
+          </List>
+        </div>
+
+        <div>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 15]}
+            component="div"
+            count={data.metadata[0].total}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </div>
+      </div>
+    );
+  };
 
   return (
     <ResizableBox
       width={size.width}
       height={size.height}
-    //   onResize={onResize}
-      resizeHandles={['ne', 'nw', 'se', 'sw', 'n', 'e', 's', 'w']}
+      resizeHandles={["ne", "nw", "se", "sw", "n", "e", "s", "w"]}
       minConstraints={[100, 50]}
-    //   maxConstraints={[500, 300]}
     >
       <div
         style={{
-          position: 'relative',
-          border: '1px solid #ddd',
-          width: '100%',
-          height: '100%',
-          boxSizing: 'border-box',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          position: "relative",
+          border: "1px solid #ddd",
+          width: "100%",
+          height: "100%",
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        {/* Your content goes here */}
-        <p>This is a resizable div</p>
+        <h4>Todos</h4>
+        {data.data.length ? ShowData() : <p>No Tasks added</p>}
       </div>
     </ResizableBox>
   );
-};
+});
 
 export default ResizableDiv;

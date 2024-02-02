@@ -8,8 +8,8 @@ Helper.getTodo = async (req, res)=>{
         page = Number(page)
         limit = Number(limit)
         
-        page = page?page-1:0
-        limit = limit?limit:0
+        page = page?page:0
+        limit = limit?limit:10
 
         let data = await Todo.aggregate([
             {
@@ -25,7 +25,11 @@ Helper.getTodo = async (req, res)=>{
             },
         ])
 
-        res.status(500).json({ success:true, data});
+        if(data.length==1){
+            data = data[0]
+        }
+
+        res.json({ success:true, data});
     }catch(er){
         console.log(er)
         res.status(500).json({ success:false, error: 'Internal Server Error' });
@@ -41,7 +45,7 @@ Helper.addTodo = async (req, res)=>{
 
         let data = await Todo.create({text})
 
-        res.status(500).json({ success:true, response:'added successfully'});
+        res.json({ success:true, response:'added successfully'});
     }catch(er){
         console.log(er)
         res.status(500).json({ success:false, error: 'Internal Server Error' });
@@ -55,7 +59,7 @@ Helper.updateTodo = async (req, res)=>{
 
         let data = await Todo.findByIdAndUpdate(_id,{$set:{text}})
 
-        res.status(500).json({ success:true, response:'updated successfully'});
+        res.json({ success:true, response:'updated successfully'});
     }catch(er){
         console.log(er)
         res.status(500).json({ success:false, error: 'Internal Server Error' });
@@ -65,11 +69,11 @@ Helper.updateTodo = async (req, res)=>{
 
 Helper.deleteTodo = async (req, res)=>{
     try{
-        let {_id, text} = req.body
-
+        let {_id} = req.query
         let data = await Todo.findByIdAndDelete(_id)
+        console.log("in this")
 
-        res.status(500).json({ success:true, response:'deleted successfully'});
+        res.json({ success:true, response:'deleted successfully'});
     }catch(er){
         console.log(er)
         res.status(500).json({ success:false, error: 'Internal Server Error' });

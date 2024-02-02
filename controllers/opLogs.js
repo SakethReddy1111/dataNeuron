@@ -6,7 +6,7 @@ Helper.getTodoLogs = async(req,res)=>{
 
         let data = await OpLogs.find({collection: 'todos'}, {method:1, count:1})
 
-        res.status(500).json({ success:true, response:data});
+        res.json({ success:true, data});
 
     }catch(er){
         console.log(er)
