@@ -30,7 +30,6 @@ app.use((req, res, next) => {
 });
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'build')));
 
 
 const TodoRouter = require("./routes/todo")
@@ -38,6 +37,8 @@ const opLogsRouter = require("./routes/opLogs")
 
 app.use("/todo", TodoRouter)
 app.use("/logs", opLogsRouter)
+
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Handle requests to any other non-API routes
 app.get('*', (req, res) => {
