@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import ResizableDiv from './imageHolders';
+import ResizableDiv1 from './resizableComponent1';
+import ResizableDiv2 from './resizableComponent2';
+import ResizableDiv3 from './resizableComponent3';
 
 const ResizableLayout = () => {
 
@@ -16,11 +18,11 @@ const ResizableLayout = () => {
   return (
     <div id="container" style={{ display: 'flex', flexDirection: 'column' }}>
       <div id="header" style={{ display: 'flex' }}>
-        <ResizableDiv case={1} />
-        <ResizableDiv case={2} />
+        <ResizableDiv1 case={1} />
+        <ResizableDiv2 case={2} />
       </div>
       <div>
-        <ResizableDiv case={3} />
+        <ResizableDiv3 case={3} />
       </div>
     </div>
   );

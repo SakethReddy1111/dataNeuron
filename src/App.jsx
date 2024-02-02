@@ -1,6 +1,5 @@
 import './App.css';
 import "./styles/resizableLayout.css";
-import "./styles/imageHolders.css";
 import ResizableLayout from './components/resizableLayout';
 
 function App() {
