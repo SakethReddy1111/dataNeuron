@@ -33,7 +33,7 @@ const ResizableDiv = forwardRef((props, ref) => {
   const getData = async()=>{
     try{
 
-      let url = process.env.REACT_APP_BASE_URL+'/logs/getTodoLogs'
+      let url = process.env.REACT_APP_BASE_URL+'logs/getTodoLogs'
       let data = await axios.get(url)
 
       setData(data.data.data)

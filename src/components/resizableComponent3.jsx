@@ -24,11 +24,11 @@ const ResizableDiv = forwardRef(({getAllData}, ref) => {
     try {
       console.log({text})
       if (text._id) {
-        let url = process.env.REACT_APP_BASE_URL + `/todo/updateTodo`;
+        let url = process.env.REACT_APP_BASE_URL + `todo/updateTodo`;
         let data = text;
         await axios.patch(url, data);
       } else {
-        let url = process.env.REACT_APP_BASE_URL + `/todo/addTodo`;
+        let url = process.env.REACT_APP_BASE_URL + `todo/addTodo`;
         let data = text;
         await axios.post(url, data);
       }
